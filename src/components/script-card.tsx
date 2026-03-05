@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Script } from '../contexts/books-context';
+import { Page } from '../contexts/books-context';
 
 type ScriptCardProps = {
-  script: Script;
+  script: Page;
   bookId: string;
 };
 
@@ -29,7 +29,7 @@ export default function ScriptCard({ script, bookId }: ScriptCardProps) {
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {script.title}
+              {script.content.split('\n')[0] || 'Untitled'}
             </h3>
             <p className="text-sm text-gray-600 line-clamp-3">
               {getPreview(script.content)}

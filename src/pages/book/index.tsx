@@ -1,22 +1,24 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useBooks } from '../../contexts/books-context';
+import toast from 'react-hot-toast';
 
 export default function BookPage() {
-  const { bookId } = useParams<{ bookId: string }>();
+  const { id } = useParams<{ id: string }>();
   const { getBook, addChapter } = useBooks();
   const [isCreateChapterOpen, setIsCreateChapterOpen] = useState(false);
   const [chapterTitle, setChapterTitle] = useState('');
   const navigate = useNavigate();
   
-  const book = getBook(bookId || '');
+  const book = getBook(id || '');
 
   const handleCreateChapter = (e: React.FormEvent) => {
     e.preventDefault();
     if (chapterTitle.trim()) {
-      addChapter(bookId || '', chapterTitle.trim());
+      addChapter(id || '', chapterTitle.trim());
       setChapterTitle('');
       setIsCreateChapterOpen(false);
+      toast.success('Chapter created successfully');
     }
   };
 
@@ -74,7 +76,7 @@ export default function BookPage() {
               <div key={chapter.id} className="glass-card group cursor-pointer hover:shadow-lg transition-shadow duration-200">
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
-                    <Link to={`/book/${bookId}/chapter/${chapter.id}`} className="block">
+                    <Link to={`/books/${id}/chapters/${chapter.id}`} className="block">
                       <h3 className="text-lg font-semibold text-white mb-2 hover:text-blue-300 transition-colors">
                         {chapter.title}
                       </h3>
@@ -85,7 +87,7 @@ export default function BookPage() {
                   </div>
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => navigate(`/book/${bookId}/chapter/${chapter.id}/edit`)}
+                      onClick={() => navigate(`/books/${id}/chapters/${chapter.id}/edit`)}
                       className="text-gray-400 hover:text-green-400 transition-colors opacity-0 group-hover:opacity-100"
                       title="Edit chapter"
                     >

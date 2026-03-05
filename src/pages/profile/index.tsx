@@ -46,8 +46,8 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">My Profile</h1>
-          <p className="text-gray-200 text-lg">Manage your account and view your writing progress</p>
+          <h1 className="text-4xl font-bold text-amber-900 mb-2">My Profile</h1>
+          <p className="text-gray-700 text-lg">Manage your account and view your writing progress</p>
         </div>
 
         {/* Profile Card */}
@@ -68,9 +68,9 @@ export default function ProfilePage() {
                     className="text-2xl font-bold text-white bg-white/10 border border-gray-300/50 rounded px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 ) : (
-                  <h2 className="text-2xl font-bold text-white">{user.name}</h2>
+                  <h2 className="text-2xl font-bold text-amber-900 mb-2">{user.name}</h2>
                 )}
-                <p className="text-gray-300">{user.email}</p>
+                <p className="text-amber-700">{user.email}</p>
               </div>
             </div>
             <div className="flex space-x-2">
@@ -111,15 +111,15 @@ export default function ProfilePage() {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white/5 rounded-lg p-4 border border-gray-200/20">
-              <h3 className="text-lg font-semibold text-white mb-2">Books Written</h3>
+              <h3 className="text-lg font-semibold text-amber-700">Books Written</h3>
               <p className="text-3xl font-bold text-blue-400">{userBooks.length}</p>
             </div>
             <div className="bg-white/5 rounded-lg p-4 border border-gray-200/20">
-              <h3 className="text-lg font-semibold text-white mb-2">Total Words</h3>
+              <h3 className="text-lg font-semibold text-amber-700">Total Words</h3>
               <p className="text-3xl font-bold text-green-400">{totalWordCount.toLocaleString()}</p>
             </div>
             <div className="bg-white/5 rounded-lg p-4 border border-gray-200/20">
-              <h3 className="text-lg font-semibold text-white mb-2">Member Since</h3>
+              <h3 className="text-lg font-semibold text-amber-700">Member Since</h3>
               <p className="text-lg text-purple-400">
                 {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
               </p>
@@ -130,7 +130,7 @@ export default function ProfilePage() {
         {/* User's Books */}
         <div className="glass-card">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold text-white">My Books</h3>
+            <h3 className="text-2xl font-bold text-amber-900 mb-2">My Books</h3>
             <Link
               to="/dashboard"
               className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-all duration-300"
@@ -146,8 +146,8 @@ export default function ProfilePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">No books yet</h3>
-              <p className="text-gray-400 mb-6">Start your writing journey by creating your first book</p>
+              <h3 className="text-xl font-semibold text-amber-700">No books yet</h3>
+              <p className="text-gray-700 mb-6">Start your writing journey by creating your first book</p>
               <Link
                 to="/dashboard"
                 className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-all duration-300"

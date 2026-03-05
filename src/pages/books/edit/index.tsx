@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBooks } from '../../../contexts/books-context';
+import toast from 'react-hot-toast';
 
 export default function EditBookPage() {
-  const { bookId } = useParams<{ bookId: string }>();
+  const { id } = useParams<{ id: string }>();
   const { getBook, updateBook } = useBooks();
   const navigate = useNavigate();
   
@@ -12,7 +13,7 @@ export default function EditBookPage() {
   const [theme, setTheme] = useState('classic');
   const [isLoading, setIsLoading] = useState(false);
 
-  const book = getBook(bookId || '');
+  const book = getBook(id || '');
 
   useEffect(() => {
     if (book) {
@@ -24,18 +25,20 @@ export default function EditBookPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !bookId) return;
+    if (!title.trim() || !id) return;
 
     setIsLoading(true);
     try {
-      updateBook(bookId, {
+      updateBook(id, {
         title: title.trim(),
         description: description.trim(),
         theme
       });
-      navigate(`/book/${bookId}`);
+      toast.success('Book updated successfully');
+      navigate(`/books/${id}`);
     } catch (error) {
       console.error('Error updating book:', error);
+      toast.error('Failed to update book');
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +125,7 @@ export default function EditBookPage() {
             <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200/20">
               <button
                 type="button"
-                onClick={() => navigate(`/book/${bookId}`)}
+                onClick={() => navigate(`/books/${id}`)}
                 className="px-6 py-3 text-gray-300 hover:text-white transition-colors"
               >
                 Cancel

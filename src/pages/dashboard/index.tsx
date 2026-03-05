@@ -55,7 +55,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm text-amber-100">Total Books</p>
+                <p className="text-lg font-semibold text-amber-700">Total Books</p>
                 <p className="text-2xl font-bold text-amber-900">{quickStats.totalBooks}</p>
               </div>
             </div>
@@ -69,7 +69,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm text-amber-100">Total Words</p>
+                <p className="text-lg font-semibold text-amber-700">Total Words</p>
                 <p className="text-2xl font-bold text-amber-900">{quickStats.totalWords.toLocaleString()}</p>
               </div>
             </div>
@@ -83,7 +83,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm text-amber-100">Writing Streak</p>
+                <p className="text-lg font-semibold text-amber-700">Writing Streak</p>
                 <p className="text-2xl font-bold text-amber-900">{quickStats.writingStreak} days</p>
               </div>
             </div>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm text-amber-100">Recently Active</p>
+                <p className="text-lg font-semibold text-amber-700">Recently Active</p>
                 <p className="text-2xl font-bold text-amber-900">{quickStats.recentlyActive}</p>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBooks } from '../../../contexts/books-context';
+import toast from 'react-hot-toast';
 
 export default function EditChapterPage() {
   const { bookId, chapterId } = useParams<{ bookId: string; chapterId: string }>();
@@ -28,9 +29,11 @@ export default function EditChapterPage() {
       updateChapter(bookId, chapterId, {
         title: title.trim()
       });
-      navigate(`/book/${bookId}/chapter/${chapterId}`);
+      toast.success('Chapter updated successfully');
+      navigate(`/books/${bookId}/chapters/${chapterId}`);
     } catch (error) {
       console.error('Error updating chapter:', error);
+      toast.error('Failed to update chapter');
     } finally {
       setIsLoading(false);
     }
@@ -42,7 +45,7 @@ export default function EditChapterPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Chapter not found</h2>
           <button
-            onClick={() => navigate(`/book/${bookId}`)}
+            onClick={() => navigate(`/books/${bookId}`)}
             className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-all duration-300"
           >
             Back to Book
@@ -94,7 +97,7 @@ export default function EditChapterPage() {
             <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200/20">
               <button
                 type="button"
-                onClick={() => navigate(`/book/${bookId}/chapter/${chapterId}`)}
+                onClick={() => navigate(`/books/${bookId}/chapters/${chapterId}`)}
                 className="px-6 py-3 text-gray-300 hover:text-white transition-colors"
               >
                 Cancel

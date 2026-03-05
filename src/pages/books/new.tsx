@@ -81,11 +81,11 @@ export default function CreateBookPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-amber-50/120 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="px-6 py-4 bg-blue-600">
+          <div className="px-6 py-4 bg-amber-700">
             <h2 className="text-2xl font-bold text-white">Create New Book</h2>
             <p className="mt-1 text-blue-100">Start your next script writing project</p>
           </div>

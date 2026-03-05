@@ -53,9 +53,13 @@ type BooksContextType = {
   addChapter: (bookId: string, title: string) => void;
   updateChapter: (bookId: string, chapterId: string, updates: Partial<Chapter>) => void;
   deleteChapter: (bookId: string, chapterId: string) => void;
-  addPage: (chapterId: string, content: string) => void;
+  addPage: (chapterId: string, content: string) => Page;
   updatePage: (bookId: string, chapterId: string, pageId: string, updates: Partial<Page>) => void;
-  deletePage: (pageId: string) => void;
+  deletePage: (bookId: string, chapterId: string, pageId: string) => void;
+  getPage: (bookId: string, chapterId: string, pageId: string) => Page | undefined;
+  createPage: (chapterId: string, content: string) => Page;
+  getPages: (bookId: string, chapterId: string) => Page[];
+  reorderPages: (bookId: string, chapterId: string, pages: Page[]) => void;
   searchBooks: (query: string) => Book[];
   getTotalWordCount: () => number;
   getRecentActivity: () => any[];
@@ -192,10 +196,9 @@ export const BooksProvider = ({ children }: { children: ReactNode }) => {
     ));
   };
 
-  const addPage = (chapterId: string, content: string) => {
+  const addPage = (chapterId: string, content: string): Page => {
     const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
-    const chapter = getChapter(chapterId, chapterId);
-    const orderIndex = chapter ? chapter.pages.length : 0;
+    const orderIndex = 0; // Will be set properly when pages are sorted
     
     const newPage: Page = {
       id: Date.now().toString(),
@@ -224,6 +227,8 @@ export const BooksProvider = ({ children }: { children: ReactNode }) => {
       ),
       updatedAt: new Date()
     })));
+    
+    return newPage;
   };
 
   const getChapter = (bookId: string, chapterId: string) => {
@@ -255,24 +260,109 @@ export const BooksProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  const deletePage = (pageId: string) => {
+  const deletePage = (bookId: string, chapterId: string, pageId: string) => {
+    setBooks(prev => prev.map(book => {
+      if (book.id === bookId) {
+        return {
+          ...book,
+          chapters: book.chapters.map(chapter => {
+            if (chapter.id === chapterId) {
+              const deletedPage = chapter.pages.find(p => p.id === pageId);
+              return {
+                ...chapter,
+                pages: chapter.pages.filter(page => page.id !== pageId),
+                wordCount: deletedPage ? chapter.wordCount - deletedPage.wordCount : chapter.wordCount,
+                updatedAt: new Date()
+              };
+            }
+            return chapter;
+          }),
+          totalWordCount: book.chapters.reduce((total, chapter) => {
+            if (chapter.id === chapterId) {
+              const deletedPage = chapter.pages.find(p => p.id === pageId);
+              return deletedPage ? total - deletedPage.wordCount : total;
+            }
+            return total;
+          }, book.totalWordCount),
+          updatedAt: new Date()
+        };
+      }
+      return book;
+    }));
+  };
+
+  const getPage = (bookId: string, chapterId: string, pageId: string): Page | undefined => {
+    const book = books.find(b => b.id === bookId);
+    if (!book) return undefined;
+    
+    const chapter = book.chapters.find(c => c.id === chapterId);
+    if (!chapter) return undefined;
+    
+    return chapter.pages.find(p => p.id === pageId);
+  };
+
+  const createPage = (chapterId: string, content: string): Page => {
+    const newPage: Page = {
+      id: Date.now().toString(),
+      chapterId,
+      content,
+      wordCount: content.split(/\s+/).filter(word => word.length > 0).length,
+      orderIndex: 0,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     setBooks(prev => prev.map(book => ({
       ...book,
       chapters: book.chapters.map(chapter => {
-        const deletedPage = chapter.pages.find(p => p.id === pageId);
-        return {
-          ...chapter,
-          pages: chapter.pages.filter(page => page.id !== pageId),
-          wordCount: deletedPage ? chapter.wordCount - deletedPage.wordCount : chapter.wordCount,
-          updatedAt: new Date()
-        };
+        if (chapter.id === chapterId) {
+          const maxOrder = Math.max(...chapter.pages.map(p => p.orderIndex), -1);
+          return {
+            ...chapter,
+            pages: [...chapter.pages, { ...newPage, orderIndex: maxOrder + 1 }],
+            wordCount: chapter.wordCount + newPage.wordCount,
+            updatedAt: new Date()
+          };
+        }
+        return chapter;
       }),
-      totalWordCount: book.chapters.reduce((total, chapter) => {
-        const deletedPage = chapter.pages.find(p => p.id === pageId);
-        return deletedPage ? total - deletedPage.wordCount : total;
-      }, book.totalWordCount),
+      totalWordCount: book.totalWordCount + newPage.wordCount,
       updatedAt: new Date()
     })));
+
+    return newPage;
+  };
+
+  const getPages = (bookId: string, chapterId: string): Page[] => {
+    const book = books.find(b => b.id === bookId);
+    if (!book) return [];
+    
+    const chapter = book.chapters.find(c => c.id === chapterId);
+    if (!chapter) return [];
+    
+    return chapter.pages.sort((a, b) => a.orderIndex - b.orderIndex);
+  };
+
+  const reorderPages = (bookId: string, chapterId: string, reorderedPages: Page[]) => {
+    setBooks(prev => prev.map(book => {
+      if (book.id === bookId) {
+        return {
+          ...book,
+          chapters: book.chapters.map(chapter => {
+            if (chapter.id === chapterId) {
+              return {
+                ...chapter,
+                pages: reorderedPages,
+                updatedAt: new Date()
+              };
+            }
+            return chapter;
+          }),
+          updatedAt: new Date()
+        };
+      }
+      return book;
+    }));
   };
 
   const searchBooks = (query: string) => {
@@ -328,6 +418,10 @@ export const BooksProvider = ({ children }: { children: ReactNode }) => {
     addPage,
     updatePage,
     deletePage,
+    getPage,
+    createPage,
+    getPages,
+    reorderPages,
     searchBooks,
     getTotalWordCount,
     getRecentActivity,

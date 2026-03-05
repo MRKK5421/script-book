@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useBooks } from '../../contexts/books-context';
+import toast from 'react-hot-toast';
 
 export default function ChapterPage() {
   const { bookId, chapterId } = useParams<{ bookId: string; chapterId: string }>();
@@ -17,6 +18,7 @@ export default function ChapterPage() {
       addPage(chapterId || '', pageContent.trim());
       setPageContent('');
       setIsCreatePageOpen(false);
+      toast.success('Page created successfully');
     }
   };
 
@@ -25,7 +27,13 @@ export default function ChapterPage() {
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Chapter not found</h2>
         <Link
-          to={`/book/${bookId}`}
+          to={`/books/${bookId}/chapters/${chapterId}/pages`}
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-amber-700 hover:bg-amber-800 mr-3"
+        >
+          View All Pages
+        </Link>
+        <Link
+          to={`/books/${bookId}`}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
         >
           Back to Book
@@ -40,7 +48,7 @@ export default function ChapterPage() {
         {/* Header */}
         <div className="mb-8">
           <Link
-            to={`/book/${bookId}`}
+            to={`/books/${bookId}`}
             className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-4"
           >
             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,44 +78,46 @@ export default function ChapterPage() {
         {/* Pages Grid */}
         {chapter.pages && chapter.pages.length > 0 ? (
           <div className="space-y-6">
-            {chapter.pages.map((page) => (
+            {chapter.pages.map((page, index) => (
               <div key={page.id} className="glass-card">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-white">Page {page.orderIndex + 1}</h3>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => {
-                            // TODO: Add edit page functionality
-                            console.log('Edit page:', page.id);
-                          }}
-                          className="text-gray-400 hover:text-green-400 transition-colors"
-                          title="Edit page"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 0l2.828 2.828a2 2 0 010 2.828l-3.828 3.828z" />
-                          </svg>
-                        </button>
-                        <button
-                          onClick={() => {
-                            // TODO: Add delete page functionality
-                            console.log('Delete page:', page.id);
-                          }}
-                          className="text-gray-400 hover:text-red-400 transition-colors"
-                          title="Delete page"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
+                <Link to={`/editor/${bookId}/${chapterId}/${page.id}`} className="block">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-white">Page {index + 1}</h3>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              // TODO: Add edit page functionality
+                              console.log('Edit page:', page.id);
+                            }}
+                            className="text-gray-400 hover:text-green-400 transition-colors"
+                            title="Edit page"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 0l2.828 2.828a2 2 0 010 2.828l-3.828 3.828z" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => {
+                              // TODO: Add delete page functionality
+                              console.log('Delete page:', page.id);
+                            }}
+                            className="text-gray-400 hover:text-red-400 transition-colors"
+                            title="Delete page"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                     </div>
+                    <div className="prose prose max-w-none">
+                      <p className="text-gray-300 whitespace-pre-wrap">{page.content}</p>
+                    </div>
                   </div>
-                  <div className="prose prose max-w-none">
-                    <p className="text-gray-300 whitespace-pre-wrap">{page.content}</p>
-                  </div>
-                </div>
+                </Link>
               </div>
             ))}
           </div>

@@ -46,6 +46,9 @@ export default function Header() {
                       <Link to="/profile" className="block p-2 text-center hover:bg-amber-100/50">
                         Profile
                       </Link>
+                      <Link to="/settings" className="block p-2 text-center hover:bg-amber-100/50">
+                        Settings
+                      </Link>
                     </>
                   ) : (
                     <>
@@ -79,12 +82,23 @@ export default function Header() {
                       </Link>
                     </div>
                   </div>
-                  <button 
-                    onClick={logout} 
-                    className="p-2 rounded-lg glass hover:bg-red-500/20 text-red-700 transition-all duration-300"
-                  >
-                    Logout
-                  </button>
+                  <div className="flex space-x-2">
+                    <Link
+                      to="/settings"
+                      className="p-2 rounded-lg glass hover:bg-gray-200/50 text-gray-700 transition-all duration-300"
+                      title="Settings"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426-1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31.826-2.37-2.37a1.724 1.724 0 002.572-1.065c1.756-.426 1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c.94-1.543.826-3.31 2.37-2.37.1.724 1.724 0 002.572-1.065c1.756-.426 1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543-.826 3.31-2.37-2.37A1.724 1.724 0 0017.826 6.724zM12 16a3 3 0 100-6 3 3 0 000 6z" />
+                      </svg>
+                    </Link>
+                    <button 
+                      onClick={logout} 
+                      className="p-2 rounded-lg glass hover:bg-red-500/20 text-red-700 transition-all duration-300"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
