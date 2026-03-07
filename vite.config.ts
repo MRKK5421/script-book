@@ -12,12 +12,13 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src'
+      '@': '/src',
+      '@src': '/Users/kk/Development/script-book/src'
     }
   },
   build: {
     rollupOptions: {
-      input: './index.html'
+      input: './frontend/index.html'
     }
   }
 })

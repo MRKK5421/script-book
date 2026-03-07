@@ -59,6 +59,21 @@
   }
 }
 
+/* Fallback utilities for when CSS variables aren't available */
+.bg-primary { background-color: hsl(var(--primary)); }
+.bg-secondary { background-color: hsl(var(--secondary)); }
+.bg-accent { background-color: hsl(var(--accent)); }
+.bg-destructive { background-color: hsl(var(--destructive)); }
+.text-primary { color: hsl(var(--primary)); }
+.text-secondary { color: hsl(var(--secondary)); }
+.text-accent { color: hsl(var(--accent)); }
+.text-destructive { color: hsl(var(--destructive)); }
+.border-input { border-color: hsl(var(--border)); }
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
+.bg-background { background-color: hsl(var(--background)); }
+.text-foreground { color: hsl(var(--foreground)); }
+.ring-ring { --tw-ring-color: hsl(var(--ring)); }
+
 /* Book styles */
 .book-container {
   perspective: 2000px;
@@ -117,4 +132,13 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
+}
+
+/* Glass card effect */
+.glass-card {
+  @apply bg-white/80 backdrop-blur-md border border-white/20 rounded-xl shadow-lg;
+}
+
+.glass {
+  @apply bg-white/60 backdrop-blur-sm border border-white/20;
 }
